@@ -2,6 +2,7 @@ package com.zerobase.hseungho.account.controller;
 
 import com.zerobase.hseungho.account.domain.Account;
 import com.zerobase.hseungho.account.dto.CreateAccount;
+import com.zerobase.hseungho.account.dto.DeleteAccount;
 import com.zerobase.hseungho.account.service.AccountService;
 import com.zerobase.hseungho.account.service.RedisTestService;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +26,26 @@ public class AccountController {
             @RequestBody @Valid CreateAccount.Request request) {
         return CreateAccount.Response.from(
                 accountService.createAccount(
-                    request.getUserId(),
-                    request.getInitialBalance()
+                        request.getUserId(),
+                        request.getInitialBalance()
+                )
+        );
+    }
+
+    @DeleteMapping("/account")
+    public DeleteAccount.Response createAccount(
+            @RequestBody @Valid DeleteAccount.Request request) {
+        return DeleteAccount.Response.from(
+                accountService.deleteAccount(
+                        request.getUserId(),
+                        request.getAccountNumber()
                 )
         );
     }
 
     @GetMapping("/account/{id}")
     public Account getAccount(
-            @PathVariable Long id){
+            @PathVariable Long id) {
         return accountService.getAccount(id);
     }
 }
