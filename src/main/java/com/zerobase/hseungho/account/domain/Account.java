@@ -1,6 +1,8 @@
 package com.zerobase.hseungho.account.domain;
 
+import com.zerobase.hseungho.account.exception.AccountException;
 import com.zerobase.hseungho.account.type.AccountStatus;
+import com.zerobase.hseungho.account.type.ErrorCode;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,9 +15,6 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 public class Account extends BaseEntity {
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @ManyToOne
     private AccountUser accountUser;
@@ -31,6 +30,11 @@ public class Account extends BaseEntity {
 
     private LocalDateTime unRegisteredAt;
 
-
+    public void useBalance(Long amount) {
+        if (amount > balance) {
+            throw new AccountException(ErrorCode.AMOUNT_EXCEED_BALANCE);
+        }
+        balance -= amount;
+    }
 
 }
