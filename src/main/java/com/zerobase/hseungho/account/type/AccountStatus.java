@@ -1,4 +1,4 @@
-package com.zerobase.hseungho.account.domain;
+package com.zerobase.hseungho.account.type;
 
 public enum AccountStatus {
     IN_USE,

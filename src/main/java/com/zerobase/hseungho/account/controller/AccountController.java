@@ -21,9 +21,14 @@ public class AccountController {
     }
 
     @PostMapping("/account")
-    public CreateAccount.Response createAccount(@RequestBody @Valid CreateAccount.Request request) {
-        accountService.createAccount();
-        return "success";
+    public CreateAccount.Response createAccount(
+            @RequestBody @Valid CreateAccount.Request request) {
+        return CreateAccount.Response.from(
+                accountService.createAccount(
+                    request.getUserId(),
+                    request.getInitialBalance()
+                )
+        );
     }
 
     @GetMapping("/account/{id}")
