@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.account.controller;
 
 import com.zerobase.hseungho.account.domain.Account;
+import com.zerobase.hseungho.account.dto.AccountInfo;
 import com.zerobase.hseungho.account.dto.CreateAccount;
 import com.zerobase.hseungho.account.dto.DeleteAccount;
 import com.zerobase.hseungho.account.service.AccountService;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +44,17 @@ public class AccountController {
                         request.getAccountNumber()
                 )
         );
+    }
+
+    @GetMapping("/account")
+    public List<AccountInfo> getAccountsByUserId(
+            @RequestParam("user_id") Long userId) {
+        return accountService.getAccountsByUserId(userId).stream()
+                .map(accountDto -> AccountInfo.builder()
+                        .accountNumber(accountDto.getAccountNumber())
+                        .balance(accountDto.getBalance())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/account/{id}")
