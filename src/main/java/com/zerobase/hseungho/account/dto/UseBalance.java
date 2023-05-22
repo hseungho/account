@@ -1,16 +1,17 @@
 package com.zerobase.hseungho.account.dto;
 
+import com.zerobase.hseungho.account.aop.AccountLockIdInterface;
 import com.zerobase.hseungho.account.type.TransactionResultType;
 import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
-public class UseBalance {
+public class UseBalance  {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Request {
+    public static class Request implements AccountLockIdInterface {
         @NotNull
         @Min(1)
         private Long userId;
