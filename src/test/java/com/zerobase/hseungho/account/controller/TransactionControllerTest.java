@@ -1,6 +1,7 @@
 package com.zerobase.hseungho.account.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zerobase.hseungho.account.dto.CancelBalance;
 import com.zerobase.hseungho.account.dto.TransactionDto;
 import com.zerobase.hseungho.account.dto.UseBalance;
 import com.zerobase.hseungho.account.service.TransactionService;
@@ -36,7 +37,7 @@ class TransactionControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("")
+    @DisplayName("컨트롤러 - 거래 사용 성공")
     void successUseBalance() throws Exception {
         // given
         given(transactionService.useBalance(anyLong(), anyString(), anyLong()))
@@ -63,6 +64,36 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.transactionResult").value("S"))
                 .andExpect(jsonPath("$.transactionId").value("transactionId"))
                 .andExpect(jsonPath("$.amount").value(12345L));
+    }
+
+    @Test
+    @DisplayName("컨트롤러 - 거래 취소 성공")
+    void successCancelBalance() throws Exception {
+        // given
+        given(transactionService.cancelBalance(anyString(), anyString(), anyLong()))
+                .willReturn(
+                        TransactionDto.builder()
+                                .accountNumber("1000000000")
+                                .transactedAt(LocalDateTime.now())
+                                .amount(54321L)
+                                .transactionId("transactionIdForCancel")
+                                .transactionResultType(TransactionResultType.S)
+                                .build()
+                );
+        // when
+        // then
+        mockMvc.perform(post("/transaction/cancel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new CancelBalance.Request("transactionId", "2000000000", 3000L)
+                        ))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountNumber").value("1000000000"))
+                .andExpect(jsonPath("$.transactionResult").value("S"))
+                .andExpect(jsonPath("$.transactionId").value("transactionIdForCancel"))
+                .andExpect(jsonPath("$.amount").value(54321L));
     }
 
 }
