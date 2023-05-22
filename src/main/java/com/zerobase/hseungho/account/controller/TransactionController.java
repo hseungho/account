@@ -1,5 +1,6 @@
 package com.zerobase.hseungho.account.controller;
 
+import com.zerobase.hseungho.account.dto.CancelBalance;
 import com.zerobase.hseungho.account.dto.UseBalance;
 import com.zerobase.hseungho.account.exception.AccountException;
 import com.zerobase.hseungho.account.service.TransactionService;
@@ -40,6 +41,30 @@ public class TransactionController {
             log.error("Failed to use balance.");
 
             transactionService.saveFailedUseTransaction(
+                    request.getAccountNumber(),
+                    request.getAmount()
+            );
+
+            throw e;
+        }
+    }
+
+    @PostMapping("/transaction/cancel")
+    public CancelBalance.Response cancelBalance(
+            @RequestBody @Valid CancelBalance.Request request
+    ) {
+        try {
+            return CancelBalance.Response.fromDto(
+                    transactionService.cancelBalance(
+                            request.getTransactionId(),
+                            request.getAccountNumber(),
+                            request.getAmount()
+                    )
+            );
+        } catch (AccountException e) {
+            log.error("Failed to cancel balance.");
+
+            transactionService.saveFailedCancelTransaction(
                     request.getAccountNumber(),
                     request.getAmount()
             );

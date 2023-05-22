@@ -41,4 +41,11 @@ public class Account extends BaseEntity {
         balance -= amount;
     }
 
+    public void cancelBalance(Long amount) {
+        if (amount < 0) {
+            throw new AccountException(ErrorCode.BAD_REQUEST);
+        }
+        balance += amount;
+    }
+
 }
