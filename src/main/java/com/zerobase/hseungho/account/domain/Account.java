@@ -4,6 +4,7 @@ import com.zerobase.hseungho.account.exception.AccountException;
 import com.zerobase.hseungho.account.type.AccountStatus;
 import com.zerobase.hseungho.account.type.ErrorCode;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,13 +13,9 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 public class Account extends BaseEntity {
-
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @ManyToOne
     private AccountUser accountUser;

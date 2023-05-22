@@ -3,6 +3,7 @@ package com.zerobase.hseungho.account.domain;
 import com.zerobase.hseungho.account.type.TransactionResultType;
 import com.zerobase.hseungho.account.type.TransactionType;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,13 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 public class Transaction extends BaseEntity {
-
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;

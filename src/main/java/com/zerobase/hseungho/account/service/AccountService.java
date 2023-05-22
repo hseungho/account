@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
@@ -28,10 +29,8 @@ public class AccountService {
      * 계좌 번호 생성
      * 계좌 저장 및 정보 응답
      */
-    @Transactional
     public AccountDto createAccount(Long userId, Long initialBalance) {
-        AccountUser accountUser = accountUserRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        AccountUser accountUser = getAccountUser(userId);
 
         validateCreateAccount(accountUser);
 
@@ -51,10 +50,8 @@ public class AccountService {
         );
     }
 
-    @Transactional
     public AccountDto deleteAccount(Long userId, String accountNumber) {
-        AccountUser accountUser = accountUserRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        AccountUser accountUser = getAccountUser(userId);
 
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
@@ -69,10 +66,8 @@ public class AccountService {
         return AccountDto.fromEntity(account);
     }
 
-    @Transactional
     public List<AccountDto> getAccountsByUserId(Long userId) {
-        AccountUser accountUser = accountUserRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        AccountUser accountUser = getAccountUser(userId);
 
         List<Account> accounts = accountRepository.findAllByAccountUser(accountUser);
 
@@ -107,7 +102,12 @@ public class AccountService {
         }
     }
 
-    @Transactional
+    private AccountUser getAccountUser(Long userId) {
+        AccountUser accountUser = accountUserRepository.findById(userId)
+                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        return accountUser;
+    }
+
     public Account getAccount(Long id) {
         if(id < 0){
             throw new RuntimeException("Minus");
