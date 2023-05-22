@@ -76,9 +76,17 @@ public class AccountService {
 
         List<Account> accounts = accountRepository.findAllByAccountUser(accountUser);
 
+        validateGetAccounts(accounts);
+
         return accounts.stream()
                 .map(AccountDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    private void validateGetAccounts(List<Account> accounts) {
+        if (accounts == null || accounts.size() == 0) {
+            throw new AccountException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
     }
 
     private void validateDeleteAccount(AccountUser accountUser, Account account) {
