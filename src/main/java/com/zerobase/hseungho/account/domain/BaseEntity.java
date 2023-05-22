@@ -13,10 +13,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;

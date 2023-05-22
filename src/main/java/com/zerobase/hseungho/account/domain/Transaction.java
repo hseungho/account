@@ -4,10 +4,7 @@ import com.zerobase.hseungho.account.type.TransactionResultType;
 import com.zerobase.hseungho.account.type.TransactionType;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,6 +14,10 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 public class Transaction extends BaseEntity {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;

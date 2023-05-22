@@ -16,6 +16,10 @@ import java.time.LocalDateTime;
 @Entity
 public class Account extends BaseEntity {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+
     @ManyToOne
     private AccountUser accountUser;
 

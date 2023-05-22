@@ -30,11 +30,11 @@ public class TransactionService {
     private final AccountRepository accountRepository;
 
     /**
-     * 사용자가 없는 경우,
-     * 사용자 아이디와 계좌 소유주가 다른 경우,
-     * 계좌가 이미 해지 상태인 경우,
-     * 거래 금액이 잔액보다 큰 경우,
-     * 거래금액이 너무 작거나 큰 경우, 실패 응답
+     * 사용자가 없는 경우, <br>
+     * 사용자 아이디와 계좌 소유주가 다른 경우, <br>
+     * 계좌가 이미 해지 상태인 경우, <br>
+     * 거래 금액이 잔액보다 큰 경우, <br>
+     * 거래금액이 너무 작거나 큰 경우, 실패 응답 <br>
      */
     public TransactionDto useBalance(Long userId, String accountNumber, Long amount) {
         AccountUser user = accountUserRepository.findById(userId)
@@ -48,7 +48,7 @@ public class TransactionService {
         account.useBalance(amount);
 
         return TransactionDto.fromEntity(
-                saveAndGetTransaction(TransactionResultType.S, amount, account)
+                saveAndGetTransaction(TransactionResultType.S, account, amount)
         );
     }
 
@@ -56,12 +56,12 @@ public class TransactionService {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
 
-        saveAndGetTransaction(TransactionResultType.F, amount, account);
+        saveAndGetTransaction(TransactionResultType.F, account, amount);
     }
 
     private Transaction saveAndGetTransaction(TransactionResultType transactionResultType,
-                                              Long amount,
-                                              Account account) {
+                                              Account account,
+                                              Long amount) {
         return transactionRepository.save(
                 Transaction.builder()
                         .transactionType(TransactionType.USE)
