@@ -29,9 +29,8 @@ public class TransactionController {
     @PostMapping("/transaction/use")
     public UseBalance.Response useBalance(
             @RequestBody @Valid UseBalance.Request request
-    ) throws InterruptedException {
+    ) {
         try {
-            Thread.sleep(3000L);
             return UseBalance.Response.fromDto(
                     transactionService.useBalance(
                             request.getUserId(),

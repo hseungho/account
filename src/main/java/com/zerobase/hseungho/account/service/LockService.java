@@ -23,7 +23,7 @@ public class LockService {
         try {
             // waitTime: lock 취득 대기 시간
             // leaseTime: lock 자동 해제 시간
-            boolean isLock = lock.tryLock(1, 15, TimeUnit.SECONDS);
+            boolean isLock = lock.tryLock(1, 5, TimeUnit.SECONDS);
             if(!isLock) {
                 log.error("======Lock acquisition failed=====");
                 throw new AccountException(ErrorCode.ACCOUNT_TRANSACTION_LOCK);
